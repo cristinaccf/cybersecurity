@@ -1,0 +1,293 @@
+# smbclient
+
+`smbclient` is a command-line client for interacting with SMB/CIFS servers and Windows file shares.
+
+It can be used to enumerate shares, access files, upload/download data, and interact with SMB services.
+
+Personal notes and reference for SMB enumeration and testing.
+
+---
+
+# Basic Syntax
+
+```bash
+smbclient //<IP>/<SHARE> [options]
+```
+
+---
+
+# List Shares
+
+```text
+-L //<IP>
+```
+
+Lists available SMB shares.
+
+Useful for initial SMB enumeration.
+
+---
+
+# Connect to a Share
+
+```text
+smbclient //<IP>/<SHARE>
+```
+
+Connects to a specific SMB share.
+
+Anonymous access can sometimes be tested with:
+
+```text
+-N
+```
+
+---
+
+# Authentication
+
+### Username
+
+```text
+-U <USERNAME>
+```
+
+### Password
+
+```text
+-p <PASSWORD>
+```
+
+### Anonymous
+
+```text
+-N
+```
+
+Avoid putting passwords directly in command history when possible.
+
+---
+
+# Workgroup / Domain
+
+```text
+-W <WORKGROUP>
+```
+
+Specify the workgroup or Windows domain.
+
+---
+
+# SMB Protocol Version
+
+```text
+-m <PROTOCOL>
+```
+
+Can be used to specify the SMB protocol version.
+
+Common protocols include:
+
+```text
+SMB2
+SMB3
+NT1
+```
+
+---
+
+# Common Options
+
+| Option | Description |
+|---|---|
+| `-L` | List available shares |
+| `-U` | Specify username |
+| `-N` | No password prompt |
+| `-p` | Specify password |
+| `-W` | Specify workgroup/domain |
+| `-m` | Specify maximum SMB protocol |
+| `-I` | Specify destination IP |
+| `-c` | Execute commands |
+| `-d` | Debug level |
+| `-s` | Specify configuration file |
+| `-g` | Machine-readable output |
+| `-A` | Authentication file |
+
+---
+
+# Interactive Commands
+
+After connecting to a share:
+
+| Command | Description |
+|---|---|
+| `ls` | List files |
+| `dir` | List files |
+| `cd` | Change directory |
+| `pwd` | Show current directory |
+| `get` | Download file |
+| `mget` | Download multiple files |
+| `put` | Upload file |
+| `mput` | Upload multiple files |
+| `mkdir` | Create directory |
+| `rmdir` | Remove directory |
+| `rm` | Delete file |
+| `mv` | Move/rename file |
+| `lcd` | Change local directory |
+| `lpwd` | Show local directory |
+| `!<command>` | Execute local command |
+| `exit` | Exit |
+| `quit` | Exit |
+
+---
+
+# Downloading Files
+
+### Single file
+
+```text
+get <FILE>
+```
+
+### Multiple files
+
+```text
+mget <FILES>
+```
+
+Useful when investigating accessible SMB shares.
+
+---
+
+# Uploading Files
+
+### Single file
+
+```text
+put <FILE>
+```
+
+### Multiple files
+
+```text
+mput <FILES>
+```
+
+Requires write permissions on the share.
+
+---
+
+# Non-Interactive Commands
+
+Use `-c` to execute commands directly.
+
+```text
+-c "<COMMAND>"
+```
+
+Useful for automating simple SMB operations.
+
+---
+
+# Anonymous Access
+
+Anonymous SMB access can sometimes expose shares without credentials.
+
+Useful options:
+
+```text
+-N
+-L
+```
+
+Potentially accessible information:
+
+- Files
+- Directories
+- Configuration files
+- Backups
+- Documents
+- Scripts
+- Credentials
+
+---
+
+# SMB Shares
+
+Common administrative shares on Windows include:
+
+```text
+ADMIN$
+C$
+IPC$
+```
+
+Other shares may contain user-accessible files.
+
+---
+
+# SMB Enumeration Workflow
+
+```text
+1. Identify SMB ports
+2. Enumerate available shares
+3. Test anonymous access
+4. Connect to interesting shares
+5. List directories/files
+6. Download interesting files
+7. Check permissions
+8. Search downloaded files for useful information
+9. Investigate credentials or configuration data
+```
+
+---
+
+# SMB Ports
+
+Common SMB-related ports:
+
+| Port | Service |
+|---|---|
+| `139` | NetBIOS Session Service |
+| `445` | SMB over TCP |
+
+Port `445` is the most commonly encountered SMB port on modern Windows systems.
+
+---
+
+# Useful Commands
+
+| Command | Purpose |
+|---|---|
+| `smbclient -L //<IP>` | List shares |
+| `smbclient -L //<IP> -N` | List shares anonymously |
+| `smbclient //<IP>/<SHARE>` | Connect to a share |
+| `smbclient //<IP>/<SHARE> -N` | Anonymous connection |
+| `smbclient //<IP>/<SHARE> -U <USER>` | Authenticated connection |
+| `get <FILE>` | Download file |
+| `put <FILE>` | Upload file |
+| `ls` | List files |
+| `cd <DIR>` | Change directory |
+| `pwd` | Show current directory |
+| `-c "<COMMAND>"` | Execute command |
+
+---
+
+# Notes
+
+- SMB stands for **Server Message Block**.
+- CIFS is an older implementation/dialect of SMB.
+- Port `445` is the main SMB port encountered in modern environments.
+- `-L` is useful for initial share enumeration.
+- `-N` can test anonymous access.
+- Access to a share does not necessarily mean read/write access.
+- Always check what permissions are available.
+- SMB shares can contain sensitive configuration files, backups, credentials, or other useful information.
+- Only access SMB services you are authorized to test.
+
+---
+
+## Resources
+
+- [Samba Documentation](https://www.samba.org/samba/docs/)
+- [smbclient Manual](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html)
