@@ -1,0 +1,147 @@
+# John the Ripper
+
+John the Ripper is a password-cracking tool used to recover passwords from hashes and other password-protected data.
+
+Personal notes and reference for using John in cybersecurity labs and CTFs.
+
+---
+
+# Basic Syntax
+
+```bash
+john [options] <file>
+```
+
+---
+
+# Wordlist Mode
+
+Use a wordlist to test candidate passwords.
+
+```text
+--wordlist=<WORDLIST>
+```
+
+Common wordlists:
+
+```text
+/usr/share/wordlists/
+/usr/share/seclists/
+```
+
+RockYou is commonly used in CTFs:
+
+```text
+rockyou.txt
+```
+
+---
+
+# Common Options
+
+| Option | Description |
+|---|---|
+| `--wordlist=<file>` | Use a wordlist |
+| `--format=<format>` | Specify hash format |
+| `--show` | Show cracked passwords |
+| `--status` | Show current cracking status |
+| `--incremental` | Incremental/brute-force mode |
+| `--mask=<mask>` | Mask-based cracking |
+| `--rules` | Enable wordlist mangling rules |
+| `--pot=<file>` | Specify pot file |
+| `--session=<name>` | Name a cracking session |
+| `--restore=<name>` | Restore a session |
+| `--fork=<num>` | Use multiple processes |
+
+---
+
+# Hash Formats
+
+John supports many hash formats.
+
+Specify one with:
+
+```text
+--format=<FORMAT>
+```
+
+Common formats encountered in labs:
+
+```text
+NT
+NTLM
+NetNTLMv2
+md5crypt
+bcrypt
+sha256crypt
+sha512crypt
+Raw-MD5
+Raw-SHA1
+Raw-SHA256
+Raw-SHA512
+```
+
+List available formats:
+
+```text
+--list=formats
+```
+
+---
+
+# Hash Identification
+
+Before cracking, determine what type of hash you have.
+
+Useful tools:
+
+```text
+hashid
+hash-identifier
+john
+```
+
+John can sometimes identify formats automatically, but specifying `--format` can avoid ambiguity.
+
+---
+
+# Show Cracked Passwords
+
+```text
+--show
+```
+
+Displays passwords already recovered by John.
+
+Useful after a cracking session.
+
+---
+
+# Wordlist Rules
+
+Rules modify words from a wordlist to generate variations.
+
+```text
+--rules
+```
+
+Useful for generating variations such as:
+
+```text
+password
+Password
+password1
+Password123
+```
+
+The exact transformations depend on the selected ruleset.
+
+---
+
+# Incremental Mode
+
+```text
+--incremental
+```
+
+Attempts passwords using incremental character
