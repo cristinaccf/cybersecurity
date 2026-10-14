@@ -1,0 +1,346 @@
+# SQLmap
+
+SQLmap is an automated tool for detecting and exploiting SQL injection vulnerabilities.
+
+It supports multiple database management systems and can automate SQL injection testing, database enumeration, and data extraction.
+
+Personal notes and reference for using SQLmap in cybersecurity labs and CTFs.
+
+---
+
+# Basic Syntax
+
+```bash
+sqlmap [options]
+```
+
+---
+
+# Target
+
+| Option | Description |
+|---|---|
+| `-u <URL>` | Target URL |
+| `--data=<DATA>` | POST data |
+| `-r <FILE>` | Load HTTP request from file |
+| `-l <FILE>` | Parse targets from Burp/Web logs |
+| `-m <FILE>` | Scan multiple targets |
+| `-g <DORK>` | Process Google dork results |
+| `--url` | Target URL |
+
+---
+
+# URL Parameters
+
+SQLmap commonly tests parameters included in the target request.
+
+For example:
+
+```text
+?id=FUZZ
+```
+
+A specific parameter can be marked for testing with:
+
+```text
+*
+```
+
+This is useful when a request contains several parameters and only one should be tested.
+
+---
+
+# Detection
+
+| Option | Description |
+|---|---|
+| `--level=<1-5>` | Level of tests performed |
+| `--risk=<1-3>` | Risk level of tests |
+| `--technique=<BEUSTQ>` | Specify SQL injection techniques |
+| `--dbms=<DBMS>` | Specify database management system |
+| `--batch` | Use default answers automatically |
+
+Higher `--level` values test more parameters and payloads.
+
+Higher `--risk` values can use more aggressive tests.
+
+---
+
+# SQL Injection Techniques
+
+| Code | Technique |
+|---|---|
+| `B` | Boolean-based blind |
+| `E` | Error-based |
+| `U` | UNION query-based |
+| `S` | Stacked queries |
+| `T` | Time-based blind |
+| `Q` | Inline queries |
+
+Specify techniques with:
+
+```text
+--technique=BEUSTQ
+```
+
+---
+
+# Database Enumeration
+
+### Identify databases
+
+```text
+--dbs
+```
+
+### Identify current database
+
+```text
+--current-db
+```
+
+### Identify current user
+
+```text
+--current-user
+```
+
+### Database users
+
+```text
+--users
+```
+
+### Database privileges
+
+```text
+--privileges
+```
+
+### Database roles
+
+```text
+--roles
+```
+
+---
+
+# Tables
+
+List tables from a database:
+
+```text
+-D <DATABASE> --tables
+```
+
+---
+
+# Columns
+
+List columns from a table:
+
+```text
+-D <DATABASE> -T <TABLE> --columns
+```
+
+---
+
+# Dump Data
+
+Dump table contents:
+
+```text
+-D <DATABASE> -T <TABLE> --dump
+```
+
+Dump an entire database:
+
+```text
+-D <DATABASE> --dump
+```
+
+Dump everything accessible:
+
+```text
+--dump-all
+```
+
+---
+
+# Specific Data
+
+Useful options:
+
+| Option | Description |
+|---|---|
+| `--count` | Count entries |
+| `--schema` | Enumerate database schema |
+| `--search` | Search for databases, tables, or columns |
+| `--exclude-sysdbs` | Exclude system databases |
+
+---
+
+# Authentication
+
+### HTTP Basic Authentication
+
+```text
+--auth-type=<TYPE>
+--auth-cred=<CREDENTIALS>
+```
+
+### HTTP Cookie
+
+```text
+--cookie="<COOKIE>"
+```
+
+### HTTP Header
+
+```text
+--headers="<HEADERS>"
+```
+
+Useful when the target requires an authenticated session.
+
+---
+
+# Request Files
+
+Load a complete HTTP request:
+
+```text
+-r request.txt
+```
+
+This is particularly useful with requests captured in Burp Suite.
+
+---
+
+# Proxy
+
+Route SQLmap traffic through a proxy:
+
+```text
+--proxy=<PROXY>
+```
+
+Useful for inspecting SQLmap requests through Burp Suite.
+
+---
+
+# User-Agent
+
+```text
+--user-agent="<USER-AGENT>"
+```
+
+### Random User-Agent
+
+```text
+--random-agent
+```
+
+---
+
+# Tamper Scripts
+
+SQLmap supports tamper scripts to modify payloads.
+
+```text
+--tamper=<SCRIPT>
+```
+
+Useful in certain filtering/WAF scenarios.
+
+List available scripts:
+
+```text
+/usr/share/sqlmap/tamper/
+```
+
+---
+
+# OS Interaction
+
+Depending on the DBMS, privileges, and configuration, SQLmap may provide OS-level functionality.
+
+Potential options include:
+
+| Option | Description |
+|---|---|
+| `--os-shell` | Attempt interactive OS shell |
+| `--os-cmd=<CMD>` | Execute OS command |
+| `--file-read=<FILE>` | Read a file |
+| `--file-write=<FILE>` | Write a file |
+| `--file-dest=<PATH>` | Destination for uploaded file |
+
+These features require appropriate database privileges and target conditions.
+
+---
+
+# Useful Options
+
+| Option | Description |
+|---|---|
+| `-u` | Target URL |
+| `--data` | POST data |
+| `-r` | Load HTTP request |
+| `--batch` | Automatic default answers |
+| `--level` | Test depth |
+| `--risk` | Test risk |
+| `--technique` | Injection techniques |
+| `--dbs` | List databases |
+| `--current-db` | Current database |
+| `--current-user` | Current user |
+| `--tables` | List tables |
+| `--columns` | List columns |
+| `--dump` | Dump data |
+| `--dump-all` | Dump all accessible data |
+| `--schema` | Database schema |
+| `--search` | Search database structure |
+| `--cookie` | HTTP cookies |
+| `--headers` | Custom headers |
+| `--proxy` | HTTP proxy |
+| `--random-agent` | Random User-Agent |
+| `--tamper` | Tamper script |
+| `--os-shell` | OS shell |
+| `--file-read` | Read remote file |
+| `--file-write` | Write remote file |
+
+---
+
+# Common Workflow
+
+```text
+1. Identify a potentially injectable parameter
+2. Test for SQL injection
+3. Identify the DBMS
+4. Identify the current database/user
+5. Enumerate databases
+6. Enumerate tables
+7. Enumerate columns
+8. Dump interesting data
+9. Investigate credentials or sensitive information
+10. Continue manually when necessary
+```
+
+---
+
+# Notes
+
+- SQLmap automates many SQL injection techniques, but understanding SQL injection manually is important.
+- `--level` controls the depth of testing.
+- `--risk` controls the risk level of payloads.
+- `--batch` avoids interactive prompts.
+- `-r` is particularly useful when working with Burp Suite.
+- Blind SQL injection can be significantly slower than error-based or UNION-based injection.
+- SQLmap may produce false positives or require manual investigation.
+- Only test applications you are authorized to assess.
+
+---
+
+## Resources
+
+- [SQLmap GitHub](https://github.com/sqlmapproject/sqlmap)
+- [SQLmap Documentation](https://sqlmap.org/)
