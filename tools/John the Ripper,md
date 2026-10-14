@@ -144,4 +144,109 @@ The exact transformations depend on the selected ruleset.
 --incremental
 ```
 
-Attempts passwords using incremental character
+Attempts passwords using incremental character combinations.
+
+This can become extremely expensive as password length and character set increase.
+
+---
+
+# Mask Mode
+
+```text
+--mask=<MASK>
+```
+
+Used to define a password pattern.
+
+Useful when part of the password structure is known.
+
+---
+
+# Sessions
+
+### Start a named session
+
+```text
+--session=<NAME>
+```
+
+### Restore
+
+```text
+--restore=<NAME>
+```
+
+### Status
+
+```text
+--status=<NAME>
+```
+
+Useful for long-running cracking jobs.
+
+---
+
+# Pot File
+
+John stores recovered passwords in a pot file.
+
+```text
+--pot=<FILE>
+```
+
+Already-cracked hashes may therefore be recovered immediately with:
+
+```text
+--show
+```
+
+---
+
+# Common Workflow
+
+```text
+1. Identify the hash type
+2. Obtain the hash in a suitable format
+3. Select a wordlist or cracking mode
+4. Specify the hash format when necessary
+5. Start John
+6. Monitor progress
+7. Show recovered passwords
+8. Document the result
+```
+
+---
+
+# Useful Commands
+
+| Command | Purpose |
+|---|---|
+| `john <file>` | Start cracking |
+| `john --wordlist=<file> <hashfile>` | Use a wordlist |
+| `john --format=<format> <file>` | Specify hash format |
+| `john --show <file>` | Show cracked passwords |
+| `john --status` | Show status |
+| `john --list=formats` | List supported formats |
+| `john --rules <file>` | Enable rules |
+| `john --incremental <file>` | Incremental mode |
+| `john --mask=<mask> <file>` | Mask mode |
+| `john --restore=<name>` | Restore session |
+
+---
+
+# Notes
+
+- A hash is not the same thing as an encrypted password.
+- The cracking method depends heavily on the hash type.
+- Wordlist attacks are usually much faster than unrestricted brute force.
+- `--format` is important when John cannot correctly identify the hash.
+- `--show` is useful for checking results without running the cracking process again.
+- John can work with many formats beyond simple password hashes.
+- Only crack credentials or hashes that you are authorized to test.
+
+---
+
+## Resources
+
+- [John the Ripper](https://www.openwall.com/john/)
+- [Openwall Documentation](https://www.openwall.com/john/doc/)
