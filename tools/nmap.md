@@ -195,14 +195,6 @@ Higher timing values increase speed but can reduce reliability and increase netw
 
 ---
 
-## IPv6
-
-| Option | Description |
-|---|---|
-| `-6` | Enable IPv6 scanning |
-
----
-
 ## IPv4 / IPv6 Protocols
 
 | Option | Description |
