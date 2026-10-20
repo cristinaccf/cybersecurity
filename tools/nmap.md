@@ -141,6 +141,7 @@ Personal notes and reference for Nmap options and commands.
 | `--host-timeout <time>` | Give up on a target after a timeout |
 | `--scan-delay <time>` | Minimum delay between probes |
 | `--max-scan-delay <time>` | Maximum delay between probes |
+| `--max-retries <num>` | Maximum retry rates for sent packets |
 
 Higher timing values increase speed but can reduce reliability and increase network traffic.
 
